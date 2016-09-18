@@ -9,13 +9,6 @@ import argparse
 import random
 from sklearn import datasets
 
-parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('integers', metavar='N', type=int, nargs='+',
-                    help='an integer for the accumulator')
-parser.add_argument('--sum', dest='accumulate', action='store_const',
-                    const=sum, default=max,
-                    help='sum the integers (default: find the max)')
-
 # HardCoded Class (Step 5)
 class HardCoded():
  #   def __init__(self, size):
@@ -30,7 +23,7 @@ class HardCoded():
             predictions.append(0)
         return predictions
 
-def main(argv):
+def main(args):
 
     size = args.integers[0] / 100
 
@@ -95,5 +88,12 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('integers', metavar='N', type=int, nargs='+',
+                        help='an integer for the accumulator')
+    parser.add_argument('--sum', dest='accumulate', action='store_const',
+                        const=sum, default=max,
+                        help='sum the integers (default: find the max)')
+    args = parser.parse_args()
+    main(args)
 
