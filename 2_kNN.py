@@ -42,6 +42,31 @@ class KNN():
 def train(train, target):
     return
 
+def loadDataset(dataset):
+    if dataset == 'iris':
+        df = pd.io.parsers.read_csv(
+        'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data',
+        header=None,
+        )
+        # df.column = ["sl", "sw", "pl", "pw", "class"]
+        df[4] = preprocessing.LabelEncoder().fit_transform(df[4])
+        iris = df.as_matrix(columns=[df.columns])
+        print(df)
+    elif dataset == 'cars':
+        df = pd.io.parsers.read_csv(
+        'http://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data',
+        header=None,
+        )
+        # df.column = ["buying", "maint", "doors", "persons", "lug_boot", "safety"]
+        for i in df:
+                df[i] = preprocessing.LabelEncoder().fit_transform(df[i])
+
+        print(df)
+    return df
+
+
+
+
 # Bro. Burton's Magic Code with Thom Tweaks
 def split_data(dataset, split_amount):
     target = np.array([i[-1] for i in dataset])
@@ -61,31 +86,18 @@ def split_data(dataset, split_amount):
 
 def main():
     # load dataset (Steps 1 & 2)
-    iris = datasets.load_iris()
 
-    df = pd.io.parsers.read_csv(
-    'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data',
-    header=None,
-    )
-    df[4] = preprocessing.LabelEncoder().fit_transform(df[4])
-    array = df.as_matrix(columns=[df.columns])
-    print(array)
-    # df = pd.io.parsers.read_csv(
-    # 'http://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data',
-    # header=None,
-    # )
-    # df = df.replace(to_replace='?', value=np.nan)
-    # imp = Imputer(missing_values='NaN', strategy='mean', axis=0) # replace ? with the mean of all numbers in column
-    # imp.fit(df)
-    # df = imp.transform(df)
-    # df[4] = preprocessing.LabelEncoder().fit_transform(df[4])
+
+
     # df = df.replace({'?': float('nan')})
-
+    loadDataset('iris')
+    loadDataset('cars')
     # mask = np.isnan(df)
     # masked_arr = np.ma.masked_array(arr, mask)
     # means = np.mean(masked_arr, axis=0)
     # print(masked_arr.filled(means))
     # mean = df.mean()
+    # print(df)
     # df = df.fillna(mean)
     # array = df.where(pd.notnull(df), df.mean(), axis='columns')
     # print(df)
@@ -98,12 +110,12 @@ def main():
 
 
     # randomize dataset instances (Step 3)
-    split = 0.7
-    x_data, x_target, y_data, y_target = split_data(array, split)
-    print(x_data)
-    print(x_target)
-    print(y_data)
-    print(y_target)
+    # split = 0.7
+    # x_data, x_target, y_data, y_target = split_data(array, split)
+    # print(x_data)
+    # print(x_target)
+    # print(y_data)
+    # print(y_target)
 
 
     # instantiate classifier (Step 6)
