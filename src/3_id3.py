@@ -79,7 +79,7 @@ def make_tree(data, targets, feature_names):
     if n_data == 0 or n_features == 0:
         # Have reached an empty branch
         return default
-    elif Counter(targets[0]) == n_data:
+    elif len(targets[0]) == n_data:
         # Only 1 class remains
         return targets[0]
     else:
@@ -136,6 +136,18 @@ def main():
     # print(X_target)
     columns = [i for i in range(len(X_data[0]))]
 
+    tree = make_tree(X_data, X_target, columns)
+    print(tree)
+
+
+    # Lenses Data
+    print("Lenses Data:")
+    lens = ld.load_dataset('lenses')
+    X_data, X_target, y_data, y_target = md.split_data(lens, split)
+    print(X_data)
+    print(X_target)
+
+    columns = [i for i in range(len(X_data[0]))]
     tree = make_tree(X_data, X_target, columns)
     print(tree)
 
