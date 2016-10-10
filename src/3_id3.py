@@ -79,7 +79,8 @@ def make_tree(data, targets, feature_names):
     if n_data == 0 or n_features == 0:
         # Have reached an empty branch
         return default
-    elif len(targets[0]) == n_data:
+    elif Counter(targets[0]) == n_data:
+    # elif len(targets[0]) == n_data:
         # Only 1 class remains
         return targets[0]
     else:
@@ -128,24 +129,44 @@ def make_tree(data, targets, feature_names):
 def main():
     split = 0.7
 
-    # Irisis Data
-    print("Irises Data:")
-    iris = ld.load_dataset('iris')
-    X_data, X_target, y_data, y_target = md.split_data(iris, split)
+    # # Irisis Data
+    # print("Irises Data:")
+    # iris = ld.load_dataset('iris')
+    # X_data, X_target, y_data, y_target = md.split_data(iris, split)
+    # # print(type(X_data[0][0]))
     # print(X_data)
     # print(X_target)
-    columns = [i for i in range(len(X_data[0]))]
-
-    tree = make_tree(X_data, X_target, columns)
-    print(tree)
-
+    # columns = [i for i in range(len(X_data[0]))]
+    #
+    # tree = make_tree(X_data, X_target, columns)
+    # print(tree)
+    #
+    #
+    # # Lenses Data
+    # print("Lenses Data:")
+    # lens = ld.load_dataset('lenses')
+    # X_data, X_target, y_data, y_target = md.split_data(lens, split)
+    # X_data = np.int16(X_data)
+    # X_target = np.int16(X_target)
+    # y_data = np.int16(y_data)
+    # y_target = np.int16(y_target)
+    #
+    # print(type(np.int16(X_data)))
+    # print(X_data)
+    # print(X_target)
+    #
+    # columns = [i for i in range(len(X_data[0]))]
+    # tree = make_tree(X_data, X_target, columns)
+    # print(tree)
 
     # Lenses Data
-    print("Lenses Data:")
-    lens = ld.load_dataset('lenses')
-    X_data, X_target, y_data, y_target = md.split_data(lens, split)
-    print(X_data)
-    print(X_target)
+    print("House Votes Data:")
+    votes = ld.load_dataset('house-votes')
+    votes = np.fliplr(votes)
+    # print(votes)
+    X_data, X_target, y_data, y_target = md.split_data(votes, split)
+    # print(X_data)
+    # print(X_target)
 
     columns = [i for i in range(len(X_data[0]))]
     tree = make_tree(X_data, X_target, columns)
