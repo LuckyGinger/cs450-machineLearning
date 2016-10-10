@@ -126,22 +126,30 @@ def make_tree(data, targets, feature_names):
             tree[feature_names[best_feature]][value] = subtree
         return tree
 
+def pretty(d, indent=0):
+   for key, value in d.items():
+      print('|\t' * indent + str(key))
+      if isinstance(value, dict):
+         pretty(value, indent+1)
+      else:
+         print('|\t' * (indent+1) + str(value))
+
 def main():
     split = 0.7
 
-    # # Irisis Data
-    # print("Irises Data:")
-    # iris = ld.load_dataset('iris')
-    # X_data, X_target, y_data, y_target = md.split_data(iris, split)
-    # # print(type(X_data[0][0]))
+    # Irisis Data
+    print("Irises Data:")
+    iris = ld.load_dataset('iris')
+    X_data, X_target, y_data, y_target = md.split_data(iris, split)
+    # print(type(X_data[0][0]))
     # print(X_data)
     # print(X_target)
-    # columns = [i for i in range(len(X_data[0]))]
-    #
-    # tree = make_tree(X_data, X_target, columns)
-    # print(tree)
-    #
-    #
+    columns = [i for i in range(len(X_data[0]))]
+
+    tree = make_tree(X_data, X_target, columns)
+    print(tree)
+    pretty(tree)
+
     # # Lenses Data
     # print("Lenses Data:")
     # lens = ld.load_dataset('lenses')
@@ -171,6 +179,7 @@ def main():
     columns = [i for i in range(len(X_data[0]))]
     tree = make_tree(X_data, X_target, columns)
     print(tree)
+    pretty(tree)
 
 if __name__ == '__main__':
     main()
