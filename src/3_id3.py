@@ -127,12 +127,12 @@ def make_tree(data, targets, feature_names):
         return tree
 
 def pretty(d, indent=0):
-   for key, value in d.items():
-      print('|\t' * indent + str(key))
-      if isinstance(value, dict):
-         pretty(value, indent+1)
-      else:
-         print('|\t' * (indent+1) + str(value))
+    for key, value in d.items():
+        print('|\t\t' * int(indent/2) + str(key))
+        if isinstance(value, dict):
+            pretty(value, indent+1)
+        else:
+            print('|\t\t' * int((indent+1)/2) + str(value))
 
 def main():
     split = 0.7
