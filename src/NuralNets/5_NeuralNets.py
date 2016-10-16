@@ -3,18 +3,24 @@ import bunch
 from sklearn import preprocessing
 import numpy as np
 import pandas as pd
+from learndata import ManipulateData as md
+
 
 
 class Net:
-    def __init__(self, num_inputs=1, num_neurons=1, bias=-1):
-        self._num_inputs = num_inputs  # const value
+    def __init__(self, data, target, num_neurons=1, bias=-1):
+        self._num_inputs = len(data[0])  # const value
         self._num_neurons = num_neurons  # const value
+        self.data = data
         self.bias = bias
         self.inputs = []
         self.neurons = []
+        self.outputs = []
 
         self._create_neurons()
+        self.calculate_outputs()
 
+        print(self.outputs)
 
         for i in range(self._num_neurons):
             print(self.neurons[i])
@@ -24,7 +30,29 @@ class Net:
     def _create_neurons(self):
         for j in range(self._num_neurons):
             self.neurons.append(Neuron(self._num_inputs))
+        return
 
+    def calculate_outputs(self):
+        temp_data = [np.insert(i, 0, self.bias) for i in self.data]
+        print(temp_data)
+
+        for data in temp_data:
+            total = np.zeros(self._num_neurons)
+            for index_neuron, neuron in enumerate(self.neurons):
+                for index_weight, weight in enumerate(neuron.get_weights()):
+                    total[index_neuron] += data[index_weight] * weight
+
+            for i, x in enumerate(total):
+                if x > 0:
+                    total[i] = 1
+                elif x <= 0:
+                    total[i] = 0
+            self.outputs.append(total)
+
+        # for row in temp_data:
+        #     for i, x in enumerate(row):
+        #         total += x *
+        return
 
 
 class Neuron:
@@ -53,12 +81,14 @@ class Neuron:
 
 
 def main():
+    split = 0.7
     file = pd.read_csv('test_data.csv').values
     print(file[0])
     inputs = len(file[0])
     num_neurons = 10  # arbitrary number at this point
-
-    Net(num_inputs=inputs, num_neurons=num_neurons)
+    X_data, X_target, y_data, y_target = md.split_data(file, split)
+    print(X_data)
+    Net(X_data, X_target, num_neurons=num_neurons)
 
 
 if __name__ == '__main__':
