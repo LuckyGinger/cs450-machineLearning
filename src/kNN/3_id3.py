@@ -1,14 +1,9 @@
 from collections import Counter
 
-from sklearn import preprocessing
 import numpy as np
-import pandas as pd
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import Imputer
-from sklearn.preprocessing import OneHotEncoder
 from learndata import LearnData as ld
 from learndata import ManipulateData as md
-
+# from sklearn import tree
 
 
 def calc_entropy(p):
@@ -134,6 +129,27 @@ def pretty(d, indent=0):
         else:
             print('|\t\t' * int((indent+1)/2) + str(value))
 
+# def test_tree(tree, data, target):
+#     keys = list(tree.keys())[0]
+#     values = list(tree.values())[0]
+#     ans = data[keys]
+#     sub_keys = list(values.keys())
+#
+#     for key in sub_keys:
+#         if key == ans:
+#             break
+#         else:
+#             counter += 1
+#
+#     try:
+#         sub_tree = list(values.values())[counter]
+#     except:
+#         sub_tree = list(values.values())[0]
+#
+#     tree = test_tree(sub_tree, data, target)
+#
+#     return tree
+
 def main():
     split = 0.7
 
@@ -141,27 +157,18 @@ def main():
     print("Irises Data:")
     iris = ld.load_dataset('iris')
     X_data, X_target, y_data, y_target = md.split_data(iris, split)
-    # print(type(X_data[0][0]))
-    # print(X_data)
-    # print(X_target)
+
     columns = [i for i in range(len(X_data[0]))]
 
-    tree = make_tree(X_data, X_target, columns)
-    print(tree)
-    pretty(tree)
+    iris_tree = make_tree(X_data, X_target, columns)
+    print(iris_tree)
+    pretty(iris_tree)
+    # print(test_tree(tree, y_data, y_target))
 
-    # # Lenses Data
+    # Lenses Data
     # print("Lenses Data:")
     # lens = ld.load_dataset('lenses')
     # X_data, X_target, y_data, y_target = md.split_data(lens, split)
-    # X_data = np.int16(X_data)
-    # X_target = np.int16(X_target)
-    # y_data = np.int16(y_data)
-    # y_target = np.int16(y_target)
-    #
-    # print(type(np.int16(X_data)))
-    # print(X_data)
-    # print(X_target)
     #
     # columns = [i for i in range(len(X_data[0]))]
     # tree = make_tree(X_data, X_target, columns)
