@@ -16,11 +16,14 @@ class LearnData():
                 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data',
                 header=None,
             )
-            # df[4] = preprocessing.LabelEncoder().fit_transform(df[4])
+            df[4] = preprocessing.LabelEncoder().fit_transform(df[4])
             df.columns = ['sl', 'sw', 'pl', 'pw', 'class']
             # iris = df.as_matrix(columns=[df.columns])
             # df = pd.DataFrame(OneHotEncoder(dtype=np.int)._fit_transform(df).toarray())
+            for i in df:
+                df[i] = preprocessing.LabelEncoder().fit_transform(df[i])
             # print(df)
+
         elif dataset == 'cars':
             df = pd.io.parsers.read_csv(
                 'http://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data',
@@ -54,6 +57,14 @@ class LearnData():
                 'https://archive.ics.uci.edu/ml/machine-learning-databases/voting-records/house-votes-84.data',
                 header=None,
             )
+        elif dataset == 'pima':
+            df = pd.io.parsers.read_csv(
+                'https://archive.ics.uci.edu/ml/machine-learning-databases/pima-indians-diabetes/pima-indians-diabetes.data',
+                header=None,
+            )
+            # df = pd.DataFrame(OneHotEncoder(dtype=np.int)._fit_transform(df).toarray())
+            for i in df:
+                df[i] = preprocessing.LabelEncoder().fit_transform(df[i])
         return df.values
 
 
