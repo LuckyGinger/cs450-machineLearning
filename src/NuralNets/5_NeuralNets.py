@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from learndata import LearnData as ld
 from learndata import ManipulateData as md
+from collections import Counter
 
 
 
@@ -12,11 +13,15 @@ class Net:
     def __init__(self, data, target, num_neurons=[1], bias=-1):
         self._num_inputs = len(data[0])  # const value
         self._num_neurons = num_neurons  # const value
+        self._num_outputs = len(Counter(target).most_common())
         self.data = data
         self.bias = bias
         self.inputs = []
         self.neurons = []
         self.outputs = []
+
+        print(len(Counter(target).most_common()))
+        print(Counter(target).most_common())
 
         self._create_neurons()
         # self.calculate_outputs()
@@ -35,15 +40,20 @@ class Net:
         return
 
     def _create_neurons(self):
-        for x, j in enumerate(self._num_neurons):  # [10, 2]
+        #  Create Hidden Neurons
+        for x, j in enumerate(self._num_neurons):
             self.neurons.append([])  # To create j number of layers
-            for i in range(j):  # To create i number of nodes in j layers
+            for i in range(j):  # To create i number of neurons in j layers
                 if x == 0:  # If it's the first layer of Neurons after the inputs
                     self.neurons[x].append(Neuron(self._num_inputs))
-                    print("F")
                 else:
                     self.neurons[x].append(Neuron(self._num_neurons[x - 1]))
-                    print("S")
+
+        #  Create Output Neurons/Last layer
+        self.neurons.append([])
+        for i in range(self._num_outputs):
+            self.neurons[-1].append(Neuron(self._num_neurons[-1]))
+
         return
 
     # def calculate_outputs(self):
@@ -68,6 +78,8 @@ class Net:
 class Neuron:
     def __init__(self, num_inputs=1):
         self.weights = []
+        self.h = 0
+        self.a = 0
         self._create_neuron(num_inputs)
         return
 
@@ -106,7 +118,7 @@ def main():
     # for i in X_data:
     #     print(i)
     # Net(X_data, X_target, num_neurons=num_neurons)
-    #
+
     #
     # print("Pima Indians Data:")
     # pima = ld.load_dataset('pima')
