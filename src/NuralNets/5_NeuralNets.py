@@ -24,20 +24,23 @@ class Net:
         print(Counter(target).most_common())
 
         self._create_neurons()
-        # self.calculate_outputs()
+        self.calculate_outputs()
 
         # print(len(self.outputs))
         # print(self.outputs)
 
-        for i, x in enumerate(self.neurons):
-            print("Layer #" + str(i) + ":")
-            for j, y in enumerate(x):
-                print("\tNeuron #" + str(j) + ": " + str(y))
+        self.display_net()
 
         # for i in range(self._num_neurons):
         #     print(self.neurons[i])
 
         return
+
+    def display_net(self):
+        for i, x in enumerate(self.neurons):
+            print("Layer #" + str(i) + ":")
+            for j, y in enumerate(x):
+                print("\tNeuron #" + str(j) + ": " + str(y))
 
     def _create_neurons(self):
         #  Create Hidden Neurons
@@ -56,7 +59,41 @@ class Net:
 
         return
 
-    # def calculate_outputs(self):
+
+    def calculate_outputs(self):
+
+        def sigmoid(x):
+            return 1 / (1 + np.math.exp(-x))
+
+        #  Todo: make this function not use four nested loops
+
+        #  Todo: incorporate this into the for loop before
+        temp_data = [np.insert(i, 0, self.bias) for i in self.data]  # add the bias to the beginning of each row
+        #  print(temp_data)
+
+        temp_h = 0
+        for data in temp_data:
+            for index_layer, layer in enumerate(self.neurons):
+                for index_neuron, neuron in enumerate(layer):
+                    for index_weight, weight in enumerate(neuron.get_weights()):
+                        if index_layer == 0:
+                            temp_h += data[index_weight] * weight
+                        else:
+                            if index_weight == 0:  #  Add the bias node
+                                temp_h += self.bias * weight
+                            else:
+                                # [print("1st", neuron) for neuron in self.neurons[index_layer - 1]]
+                                # [print("2nd", neuron) for neuron in self.neurons[index_layer]]
+
+                                #  Get the each neuron a value from the layer before and multiply it by the weight
+                                temp_h += self.neurons[index_layer - 1][index_weight - 1].get_a() * weight
+                    neuron.set_h(round(temp_h, 2))
+                    neuron.set_a(round(sigmoid(temp_h), 2))
+                    temp_h = 0
+        return
+
+
+        # def calculate_outputs(self):
     #     temp_data = [np.insert(i, 0, self.bias) for i in self.data]  # add the bias to the beginning of each row
     #     # print(temp_data)
     #
@@ -84,7 +121,7 @@ class Neuron:
         return
 
     def __str__(self):
-        return str(self.get_weights())
+        return "h: " + str(self.h) + " a: " + str(self.a) + " " + str(self.get_weights())
 
     def append_weight(self, weight):
         self.weights.append(weight)
@@ -94,6 +131,18 @@ class Neuron:
 
     def get_weight(self, index):
         return self.weights[index]
+
+    def set_h(self, h):
+        self.h = h
+
+    def set_a(self, a):
+        self.a = a
+
+    def get_h(self):
+        return self.h
+
+    def get_a(self):
+        return self.a
 
     def _create_neuron(self, num_inputs):
         self.append_weight(round(random.uniform(-1, 1), 2))  # bias weight
@@ -107,17 +156,17 @@ def main():
     file = pd.read_csv('test_data.csv').values
     print(file[0])
     inputs = len(file[0])
-    num_neurons = [10, 2, 7, 13, 2]  # array for the number of neurons in each hidden layer
+    num_neurons = [10, 2]  # array for the number of neurons in each hidden layer
     X_data, X_target, y_data, y_target = md.split_data(file, split)
     print(X_data)
     Net(X_data, X_target, num_neurons=num_neurons)
 
-    # print("Irises Data:")
-    # iris = ld.load_dataset('iris')
-    # X_data, X_target, y_data, y_target = md.split_data(iris, split)
+    print("Irises Data:")
+    iris = ld.load_dataset('iris')
+    X_data, X_target, y_data, y_target = md.split_data(iris, split)
     # for i in X_data:
     #     print(i)
-    # Net(X_data, X_target, num_neurons=num_neurons)
+    Net(X_data, X_target, num_neurons=num_neurons)
 
     #
     # print("Pima Indians Data:")
