@@ -80,6 +80,7 @@ class Net:
     def calculate_outputs(self):
 
         def sigmoid(x):
+            # TODO: Figure out the "OverflowError: math range error"
             return 1 / (1 + np.math.exp(-x))
 
         temp_h = 0
