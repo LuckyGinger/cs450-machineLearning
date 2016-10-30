@@ -73,20 +73,22 @@ class ManipulateData():
         return
 
         # Bro. Burton's Magic Code with Thom Tweaks
-    def split_data(dataset, split_amount):
+    def split_data(dataset, split_amount=1):
             data, target = dataset[:, :-1], dataset[:, -1]
 
-            split_index = int(split_amount * len(data))
+            if split_amount == 1:
+                return data, target, 0, 0
+            else:
+                split_index = int(split_amount * len(data))
 
-            indices = np.random.permutation(len(data))
+                indices = np.random.permutation(len(data))
 
-            X_data = data[indices[:split_index]]
-            X_target = target[indices[:split_index]]
+                X_data = data[indices[:split_index]]
+                X_target = target[indices[:split_index]]
 
-            y_data = data[indices[split_index:]]
-            y_target = target[indices[split_index:]]
-
-            return (X_data, X_target, y_data, y_target)
+                y_data = data[indices[split_index:]]
+                y_target = target[indices[split_index:]]
+                return (X_data, X_target, y_data, y_target)
 
     def process_data(X_data, X_target, y_data, y_target):
         sknn = KNeighborsClassifier(n_neighbors=3)
