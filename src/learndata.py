@@ -17,11 +17,11 @@ class LearnData():
                 header=None,
             )
             df[4] = preprocessing.LabelEncoder().fit_transform(df[4])
-            df.columns = ['sl', 'sw', 'pl', 'pw', 'class']
+            # df.columns = ['sl', 'sw', 'pl', 'pw', 'class']
             # iris = df.as_matrix(columns=[df.columns])
             # df = pd.DataFrame(OneHotEncoder(dtype=np.int)._fit_transform(df).toarray())
-            for i in df:
-                df[i] = preprocessing.LabelEncoder().fit_transform(df[i])
+            # for i in df:
+            #     df[i] = preprocessing.LabelEncoder().fit_transform(df[i])
             # print(df)
 
         elif dataset == 'cars':
@@ -76,12 +76,12 @@ class ManipulateData():
     def split_data(dataset, split_amount=1):
             data, target = dataset[:, :-1], dataset[:, -1]
 
+            indices = np.random.permutation(len(data))
+
             if split_amount == 1:
-                return data, target, 0, 0
+                return data[indices[:]], target[indices[:]], 0, 0
             else:
                 split_index = int(split_amount * len(data))
-
-                indices = np.random.permutation(len(data))
 
                 X_data = data[indices[:split_index]]
                 X_target = target[indices[:split_index]]
