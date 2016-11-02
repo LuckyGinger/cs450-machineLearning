@@ -9,7 +9,7 @@ from collections import Counter
 
 
 class Net:
-    def __init__(self, data, target, num_neurons=[1], bias=-1, learn_rate=0.2):
+    def __init__(self, data, target, num_neurons=[1], bias=-1, learn_rate=0.2, name='file'):
         self._num_inputs = len(data[0])  # const value
         self._num_neurons = num_neurons  # const value
         self._num_outputs = len(Counter(target).most_common())
@@ -34,11 +34,13 @@ class Net:
         print("Before: ")
         # self.display_net()
         print()
-        for i in range(100000):
+        f = open(name + '.csv', 'w')
+        for i in range(1000):
             # print("Forward: ")
             # self.display_net()
             self.calculate_outputs()
 
+            f.write(str(i) + "," + str(self.accuracy()) + "\n")
             # print("Forward Display: ")
             # self.display_net()
             # print()
@@ -46,10 +48,10 @@ class Net:
             # self.backwards()
             # print("Backwards Display: ")
             # print()
-            if (i % 1000 == 0):
-                print(self.outputs)
-                print(self.double_diff_out)
-                print(i, "Accuracy: " + str(self.accuracy()) + "%")
+            # if (i % 1000 == 0):
+            #     print(self.outputs)
+            #     print(self.double_diff_out)
+            #     print(i, "Accuracy: " + str(self.accuracy()) + "%")
             # indices = np.random.permutation(len(data))
             # self.data = [np.insert(i, 0, self.bias) for i in data[indices[:]]]
             # print(self.data)
@@ -64,7 +66,7 @@ class Net:
         # print(self.outputs)
         # print(len(self.outputs))
         # print(self.outputs)
-
+        f.close()
         # print(self.outputs)
         print(self.accuracy())
         # print("Accuracy: " + str(self.accuracy()) + "%")
@@ -285,25 +287,25 @@ def main():
     num_neurons = [1]  # array for the number of neurons in each hidden layer
     X_data, X_target, y_data, y_target = md.split_data(file, split)
     print(X_data, X_target)
-    Net(X_data, X_target, num_neurons=num_neurons)
+    Net(X_data, X_target, num_neurons=num_neurons, name='AND')
     # print()
 
-    # print("Irises Data:")
-    # iris = ld.load_dataset('iris')
-    # X_data, X_target, y_data, y_target = md.split_data(iris, split)
-    # # # for i in X_data:
-    # # #     print(i)
-    # num_neurons = [1]  # array for the number of neurons in each hidden layer
-    # Net(X_data, X_target, num_neurons=num_neurons)
-    # # print()
-
-
-    # print("Pima Indians Data:")
-    # pima = ld.load_dataset('pima')
-    # X_data, X_target, y_data, y_target = md.split_data(pima, split)
+    print("Irises Data:")
+    iris = ld.load_dataset('iris')
+    X_data, X_target, y_data, y_target = md.split_data(iris, split)
     # # for i in X_data:
     # #     print(i)
-    # Net(X_data, X_target, num_neurons=num_neurons)
+    num_neurons = [1]  # array for the number of neurons in each hidden layer
+    Net(X_data, X_target, num_neurons=num_neurons, name='IRISES')
+    # print()
+
+
+    print("Pima Indians Data:")
+    pima = ld.load_dataset('pima')
+    X_data, X_target, y_data, y_target = md.split_data(pima, split)
+    # for i in X_data:
+    #     print(i)
+    Net(X_data, X_target, num_neurons=num_neurons, name='INDIANS')
     # print()
 
 
